@@ -1,4 +1,4 @@
-module onboarding/exercise1
+module clothing-shop
 
 go 1.19
 

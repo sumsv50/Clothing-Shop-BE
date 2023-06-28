@@ -1,10 +1,10 @@
 package handler
 
 import (
+	. "clothing-shop/model"
+	. "clothing-shop/service"
 	"encoding/json"
 	"net/http"
-	. "onboarding/exercise1/model"
-	. "onboarding/exercise1/service"
 	"reflect"
 
 	sv "github.com/core-go/service"

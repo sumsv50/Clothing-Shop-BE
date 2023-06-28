@@ -1,9 +1,9 @@
 package app
 
 import (
-	"onboarding/exercise1/app/config"
-	"onboarding/exercise1/handler"
-	"onboarding/exercise1/service"
+	"clothing-shop/app/config"
+	"clothing-shop/handler"
+	"clothing-shop/service"
 )
 
 type ApplicationContext struct {

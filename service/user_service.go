@@ -1,9 +1,9 @@
 package service
 
 import (
+	. "clothing-shop/model"
 	"database/sql"
 	"fmt"
-	. "onboarding/exercise1/model"
 	"reflect"
 
 	q "github.com/core-go/sql"

@@ -1,7 +1,7 @@
 package main
 
 import (
-	"onboarding/exercise1/app"
+	"clothing-shop/app"
 )
 
 func main() {
