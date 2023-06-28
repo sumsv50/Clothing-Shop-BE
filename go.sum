@@ -1,0 +1,8 @@
+github.com/core-go/service v0.3.5 h1:Sc9zELLfAoUEUe/GZmkgzXDxhTGjVDeDfnJztNC8wDM=
+github.com/core-go/service v0.3.5/go.mod h1:LUwlp3n/9D6/w5dHoUtcndhDA73Z6dZeB7esgD0hcKs=
+github.com/core-go/sql v0.3.6 h1:uzgKHXafIH1K2pFsl0zs21neuqI/lIAtxIkhQRYGin8=
+github.com/core-go/sql v0.3.6/go.mod h1:8hRTaaPVqey2TKPhKQyG/Gc1MVB5o2WcsslleHqPAGw=
+github.com/go-sql-driver/mysql v1.6.0 h1:BCTh4TKNUYmOmMUcQ3IipzF5prigylS7XXjEkfCHuOE=
+github.com/go-sql-driver/mysql v1.6.0/go.mod h1:DCzpHaOWr8IXmIStZouvnhqoel9Qv2LBy8hT2VhHyBg=
+github.com/gorilla/mux v1.8.0 h1:i40aqfkR1h2SlN9hojwV5ZA91wcXFOvkdNIeFDP5koI=
+github.com/gorilla/mux v1.8.0/go.mod h1:DVbg23sWSpFRCP0SfiEN6jmj59UnW/n46BH5rLB71So=
