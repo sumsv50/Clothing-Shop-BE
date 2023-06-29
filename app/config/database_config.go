@@ -1,34 +1,21 @@
 package config
 
 import (
-	"database/sql"
 	"fmt"
 	"log"
 
-	"github.com/go-sql-driver/mysql"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
-func ConnectToDB() *sql.DB {
-	cfg := mysql.Config{
-		User:                 "u5pjo6qs39eqbiys",
-		Passwd:               "yzTVUFLhdnhzxkKXpHYI",
-		Net:                  "tcp",
-		Addr:                 "bvczjxsdxdbwmd02n1cj-mysql.services.clever-cloud.com",
-		DBName:               "bvczjxsdxdbwmd02n1cj",
-		AllowNativePasswords: true,
-	}
-	// Get a database handle.
-	var err error
-	var DB *sql.DB
-	DB, err = sql.Open("mysql", cfg.FormatDSN())
+func ConnectToDB() *gorm.DB {
+	dsn := "host=b4gdi69qs6nnyap9lgt2-postgresql.services.clever-cloud.com user=uz23oabarbdsfxmix2an password=PCdDdKnhrZH84uFHbm7pB8o3IK0COi dbname=b4gdi69qs6nnyap9lgt2 port=5432 sslmode=disable"
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	pingErr := DB.Ping()
-	if pingErr != nil {
-		log.Fatal(pingErr)
-	}
 	fmt.Println("Connect to DB successfully!")
-	return DB
+	return db
 }

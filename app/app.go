@@ -12,7 +12,7 @@ type ApplicationContext struct {
 
 func NewApp() *ApplicationContext {
 	db := config.ConnectToDB()
-	userService := service.NewUserService(db)
+	userService := service.NewProductService(db)
 	userHandler := handler.NewUserHandler(*userService)
 
 	return &ApplicationContext{UserHandler: userHandler}
