@@ -3,7 +3,6 @@ package service
 import (
 	. "clothing-shop/model"
 	"fmt"
-
 	"gorm.io/gorm"
 )
 
@@ -22,4 +21,30 @@ func (s *ProductService) CreateProduct(product Product) (*Product, error) {
 	}
 
 	return &product, nil
+}
+
+func (s *ProductService) GetProducts() ([]*Product, error) {
+    var products []*Product
+    err := s.DB.Find(&products).Error
+    if err != nil {
+        return nil, fmt.Errorf("create product failed: %v",err)
+    }
+    return products, nil
+}
+func (s *ProductService) DeleteProductSoft(product Product, id string) ( error) {
+    err := s.DB.First(&product, id).Error
+    if err != nil {
+        return  err // Product not found, return error
+    }
+    product.IsDelete = true
+    err = s.DB.Save(&product).Error
+    if err != nil {
+        return  err 
+    }
+
+    return  nil 
+}
+func (r *ProductService) Update(product Product) (int64, error) {
+	res := r.DB.Save(&product)
+	return res.RowsAffected, nil
 }

@@ -16,4 +16,5 @@ type Product struct {
 	Price            *int           `json:"price" gorm:"column:price"`
 	Size             *string        `json:"size" gorm:"column:size"`
 	ProductQuality   *string        `json:"productQuality" gorm:"column:productquality"`
+	IsDelete         bool          `json:"is_delete" gorm:"is_delete"`
 }
