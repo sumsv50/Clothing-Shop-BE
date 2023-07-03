@@ -34,3 +34,8 @@ func (user *User) CheckPassword(providedPassword string) error {
 	}
 	return nil
 }
+
+type LoginReq struct {
+	Username *string `json:"username"`
+	Password *string `json:"password"`
+}
