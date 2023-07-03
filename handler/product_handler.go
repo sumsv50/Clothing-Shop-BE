@@ -17,12 +17,6 @@ func NewProductHandler(s service.ProductService) *ProductHandler {
 	return &ProductHandler{service: s}
 }
 
-type RespFormat struct {
-	Ok      bool        `json:"ok"`
-	Message string      `json:"message,omitempty"`
-	Data    interface{} `json:"data,omitempty"`
-}
-
 func (h *ProductHandler) CreateProductHandler(w http.ResponseWriter, r *http.Request) {
 	var product Product
 	err := json.NewDecoder(r.Body).Decode(&product)
@@ -48,22 +42,18 @@ func (h *ProductHandler) GetProductsHandler(w http.ResponseWriter, r *http.Reque
 		JSON(w, http.StatusInternalServerError, err.Error(), nil)
 		return
 	}
-	JSON(w, http.StatusCreated, "", map[string]interface{}{"products": products})
+	JSON(w, http.StatusOK, "", map[string]interface{}{"products": products})
 }
 
 func (h *ProductHandler) SoftDeleteProductHandler(w http.ResponseWriter, r *http.Request) {
 
 	id := mux.Vars(r)["id"]
-	if len(id) == 0 {
-		http.Error(w, "Id cannot be empty", http.StatusBadRequest)
-		return
-	}
 	er2 := h.service.DeleteProductSoft(id)
 	if er2 != nil {
-		http.Error(w, er2.Error(), http.StatusInternalServerError)
+		JSON(w, http.StatusInternalServerError, er2.Error(), nil)
 		return
 	}
-	JSON(w, http.StatusCreated, "", map[string]interface{}{})
+	JSON(w, http.StatusOK, "", map[string]interface{}{})
 }
 
 func (h *ProductHandler) UpdateProductHandler(w http.ResponseWriter, r *http.Request) {
@@ -71,44 +61,15 @@ func (h *ProductHandler) UpdateProductHandler(w http.ResponseWriter, r *http.Req
 	er1 := json.NewDecoder(r.Body).Decode(&product)
 	defer r.Body.Close()
 	if er1 != nil {
-		http.Error(w, er1.Error(), http.StatusBadRequest)
+		JSON(w, http.StatusBadRequest, er1.Error(), nil)
 		return
 	}
 	id := mux.Vars(r)["id"]
-	if len(id) == 0 {
-		http.Error(w, "Id cannot be empty", http.StatusBadRequest)
-		return
-	}
 	product.Id = &id
 	res, er2 := h.service.Update(product)
 	if er2 != nil {
-		http.Error(w, er2.Error(), http.StatusInternalServerError)
+		JSON(w, http.StatusInternalServerError, er2.Error(), nil)
 		return
 	}
-	JSON(w, http.StatusCreated, "", map[string]interface{}{"product": res})
-}
-
-func JSON(w http.ResponseWriter, code int, message string, data interface{}) error {
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(code)
-
-	successHttpStatus := []int{
-		http.StatusOK,
-		http.StatusCreated,
-		http.StatusNoContent,
-	}
-
-	isOk := false
-	for _, value := range successHttpStatus {
-		if value == code {
-			isOk = true
-			break
-		}
-	}
-
-	return json.NewEncoder(w).Encode(RespFormat{
-		Ok:      isOk,
-		Message: message,
-		Data:    data,
-	})
+	JSON(w, http.StatusOK, "", map[string]interface{}{"product": res})
 }
