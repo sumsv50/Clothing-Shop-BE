@@ -4,8 +4,9 @@ import (
 	. "clothing-shop/model"
 	. "clothing-shop/service"
 	"encoding/json"
-	"github.com/gorilla/mux"
 	"net/http"
+
+	"github.com/gorilla/mux"
 )
 
 type UserHandler struct {
@@ -41,46 +42,28 @@ func (h *UserHandler) CreateProductHandler(w http.ResponseWriter, r *http.Reques
 
 func (h *UserHandler) GetProductsHandler(w http.ResponseWriter, r *http.Request) {
 	var products []*Product
-	err := json.NewDecoder(r.Body).Decode(&products)
-	defer r.Body.Close()
-	if err != nil {
-		JSON(w, http.StatusBadRequest, err.Error(), nil)
-		return
-	}
 
-	products, err = h.service.GetProducts()
+	products, err := h.service.GetProducts()
 	if err != nil {
 		JSON(w, http.StatusInternalServerError, err.Error(), nil)
 		return
 	}
-	JSON(w, http.StatusCreated, "", map[string]interface{}{"user": products})
+	JSON(w, http.StatusCreated, "", map[string]interface{}{"products": products})
 }
 
 func (h *UserHandler) SoftDeleteProductHandler(w http.ResponseWriter, r *http.Request) {
-	var product Product
-	er1 := json.NewDecoder(r.Body).Decode(&product)
-	defer r.Body.Close()
-	if er1 != nil {
-		http.Error(w, er1.Error(), http.StatusBadRequest)
-		return
-	}
+
 	id := mux.Vars(r)["id"]
 	if len(id) == 0 {
 		http.Error(w, "Id cannot be empty", http.StatusBadRequest)
 		return
 	}
-	if len(*product.Id) == 0 {
-		product.Id = &id
-	} else if id != *product.Id {
-		http.Error(w, "Id not match", http.StatusBadRequest)
-		return
-	}
- 	er2 := h.service.DeleteProductSoft(product,id)
+	er2 := h.service.DeleteProductSoft(id)
 	if er2 != nil {
 		http.Error(w, er2.Error(), http.StatusInternalServerError)
 		return
 	}
-	JSON(w, http.StatusCreated, "", map[string]interface{}{"user": product})
+	JSON(w, http.StatusCreated, "", map[string]interface{}{})
 }
 
 func (h *UserHandler) UpdateProductHandler(w http.ResponseWriter, r *http.Request) {
@@ -96,19 +79,13 @@ func (h *UserHandler) UpdateProductHandler(w http.ResponseWriter, r *http.Reques
 		http.Error(w, "Id cannot be empty", http.StatusBadRequest)
 		return
 	}
-	if len(*product.Id) == 0 {
-		product.Id = &id
-	} else if id != *product.Id {
-		http.Error(w, "Id not match", http.StatusBadRequest)
-		return
-	}
-
+	product.Id = &id
 	res, er2 := h.service.Update(product)
 	if er2 != nil {
 		http.Error(w, er2.Error(), http.StatusInternalServerError)
 		return
 	}
-	JSON(w, http.StatusCreated, "", map[string]interface{}{"user": res})
+	JSON(w, http.StatusCreated, "", map[string]interface{}{"product": res})
 }
 
 func JSON(w http.ResponseWriter, code int, message string, data interface{}) error {
