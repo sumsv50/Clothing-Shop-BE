@@ -7,13 +7,13 @@ import (
 )
 
 type ApplicationContext struct {
-	UserHandler *handler.UserHandler
+	ProductHandler *handler.ProductHandler
 }
 
 func NewApp() *ApplicationContext {
 	db := config.ConnectToDB()
-	userService := service.NewProductService(db)
-	userHandler := handler.NewUserHandler(*userService)
+	productService := service.NewProductService(db)
+	productHandler := handler.NewProductHandler(*productService)
 
-	return &ApplicationContext{UserHandler: userHandler}
+	return &ApplicationContext{ProductHandler: productHandler}
 }

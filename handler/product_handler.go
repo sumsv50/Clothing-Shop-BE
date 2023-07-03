@@ -2,19 +2,19 @@ package handler
 
 import (
 	. "clothing-shop/model"
-	. "clothing-shop/service"
+	"clothing-shop/service"
 	"encoding/json"
 	"net/http"
 
 	"github.com/gorilla/mux"
 )
 
-type UserHandler struct {
-	service ProductService
+type ProductHandler struct {
+	service service.ProductService
 }
 
-func NewUserHandler(s ProductService) *UserHandler {
-	return &UserHandler{service: s}
+func NewProductHandler(s service.ProductService) *ProductHandler {
+	return &ProductHandler{service: s}
 }
 
 type RespFormat struct {
@@ -23,7 +23,7 @@ type RespFormat struct {
 	Data    interface{} `json:"data,omitempty"`
 }
 
-func (h *UserHandler) CreateProductHandler(w http.ResponseWriter, r *http.Request) {
+func (h *ProductHandler) CreateProductHandler(w http.ResponseWriter, r *http.Request) {
 	var product Product
 	err := json.NewDecoder(r.Body).Decode(&product)
 	defer r.Body.Close()
@@ -37,10 +37,10 @@ func (h *UserHandler) CreateProductHandler(w http.ResponseWriter, r *http.Reques
 		JSON(w, http.StatusInternalServerError, err.Error(), nil)
 		return
 	}
-	JSON(w, http.StatusCreated, "", map[string]interface{}{"user": createdProduct})
+	JSON(w, http.StatusCreated, "", map[string]interface{}{"product": createdProduct})
 }
 
-func (h *UserHandler) GetProductsHandler(w http.ResponseWriter, r *http.Request) {
+func (h *ProductHandler) GetProductsHandler(w http.ResponseWriter, r *http.Request) {
 	var products []*Product
 
 	products, err := h.service.GetProducts()
@@ -51,7 +51,7 @@ func (h *UserHandler) GetProductsHandler(w http.ResponseWriter, r *http.Request)
 	JSON(w, http.StatusCreated, "", map[string]interface{}{"products": products})
 }
 
-func (h *UserHandler) SoftDeleteProductHandler(w http.ResponseWriter, r *http.Request) {
+func (h *ProductHandler) SoftDeleteProductHandler(w http.ResponseWriter, r *http.Request) {
 
 	id := mux.Vars(r)["id"]
 	if len(id) == 0 {
@@ -66,7 +66,7 @@ func (h *UserHandler) SoftDeleteProductHandler(w http.ResponseWriter, r *http.Re
 	JSON(w, http.StatusCreated, "", map[string]interface{}{})
 }
 
-func (h *UserHandler) UpdateProductHandler(w http.ResponseWriter, r *http.Request) {
+func (h *ProductHandler) UpdateProductHandler(w http.ResponseWriter, r *http.Request) {
 	var product Product
 	er1 := json.NewDecoder(r.Body).Decode(&product)
 	defer r.Body.Close()
