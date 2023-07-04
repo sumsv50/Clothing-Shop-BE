@@ -4,6 +4,8 @@ import (
 	"log"
 	"net/http"
 
+	"clothing-shop/middleware"
+
 	"github.com/gorilla/mux"
 )
 
@@ -13,13 +15,18 @@ func Route() {
 	const product = "/products"
 	const auth = "/auth"
 	myRouter := mux.NewRouter().StrictSlash(true)
-	// Products API
-	myRouter.HandleFunc(apiPath+product, app.ProductHandler.CreateProductHandler).Methods("POST")
-	myRouter.HandleFunc(apiPath+product, app.ProductHandler.GetProductsHandler).Methods("GET")
-	myRouter.HandleFunc(apiPath+product+"/{id}", app.ProductHandler.SoftDeleteProductHandler).Methods("DELETE")
-	myRouter.HandleFunc(apiPath+product+"/{id}", app.ProductHandler.UpdateProductHandler).Methods("PATCH")
+	protectedRouter := myRouter.NewRoute().Subrouter()
+	protectedRouter.Use(middleware.AuthenticationMiddleware)
 
-	// Auth API
+	// Protected product APIs
+	protectedRouter.HandleFunc(apiPath+product, app.ProductHandler.CreateProductHandler).Methods("POST")
+	protectedRouter.HandleFunc(apiPath+product+"/{id}", app.ProductHandler.SoftDeleteProductHandler).Methods("DELETE")
+	protectedRouter.HandleFunc(apiPath+product+"/{id}", app.ProductHandler.UpdateProductHandler).Methods("PATCH")
+
+	// Product APIs
+	myRouter.HandleFunc(apiPath+product, app.ProductHandler.GetProductsHandler).Methods("GET")
+
+	// Auth APIs
 	myRouter.HandleFunc(apiPath+auth+"/local", app.UserHandler.Login).Methods("POST")
 
 	log.Fatal(http.ListenAndServe(":3000", myRouter))

@@ -17,7 +17,7 @@ func NewUserService(db *gorm.DB) *UserService {
 
 func (s *UserService) Login(username, password string) (*User, error) {
 	user := User{Username: &username}
-	result := s.DB.First(&user)
+	result := s.DB.Where("username = ? AND role = ? AND is_deleted = ?", username, "admin", false).First(&user)
 	if result.Error != nil {
 		return nil, fmt.Errorf("get user fail: %v", result.Error)
 	}

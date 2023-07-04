@@ -27,6 +27,7 @@ func (h *UserHandler) Login(w http.ResponseWriter, r *http.Request) {
 	user, err := h.service.Login(*loginReq.Username, *loginReq.Password)
 	if err != nil || user == nil {
 		JSON(w, http.StatusUnauthorized, "", nil)
+		return
 	}
 
 	token, err := service.GenerateJWT(*user.Id)
