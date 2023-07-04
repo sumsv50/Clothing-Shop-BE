@@ -16,6 +16,7 @@ type User struct {
 	DateOfBirth *time.Time `json:"dob" gorm:"column:dob"`
 	Role        *string    `json:"role" gorm:"column:role"`
 	IsDeleted   bool       `json:"isDeleted" gorm:"is_deleted"`
+	Audit       `gorm:"embedded"`
 }
 
 func (user *User) HashPassword(password string) error {

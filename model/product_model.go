@@ -17,4 +17,5 @@ type Product struct {
 	Size             *string        `json:"size" gorm:"column:size"`
 	ProductQuality   *string        `json:"productQuality" gorm:"column:productquality"`
 	IsDeleted        *bool          `json:"is_deleted" gorm:"column:is_deleted;default:false"`
+	Audit            `gorm:"embedded"`
 }
