@@ -4,8 +4,6 @@ import (
 	"log"
 	"net/http"
 
-	"clothing-shop/middleware"
-
 	"github.com/gorilla/mux"
 )
 
@@ -16,7 +14,8 @@ func Route() {
 	const auth = "/auth"
 	myRouter := mux.NewRouter().StrictSlash(true)
 	protectedRouter := myRouter.NewRoute().Subrouter()
-	protectedRouter.Use(middleware.AuthenticationMiddleware)
+	// Turn off authentication admin APIs
+	// protectedRouter.Use(middleware.AuthenticationMiddleware)
 
 	// Protected product APIs
 	protectedRouter.HandleFunc(apiPath+product, app.ProductHandler.CreateProductHandler).Methods("POST")
