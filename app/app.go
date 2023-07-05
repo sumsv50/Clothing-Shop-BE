@@ -9,6 +9,7 @@ import (
 type ApplicationContext struct {
 	ProductHandler *handler.ProductHandler
 	UserHandler    *handler.UserHandler
+	PartnerHandler *handler.PartnerHandler
 }
 
 func NewApp() *ApplicationContext {
@@ -17,9 +18,12 @@ func NewApp() *ApplicationContext {
 	productHandler := handler.NewProductHandler(*productService)
 	userService := service.NewUserService(db)
 	userHandler := handler.NewUserHandler(*userService)
-
+	partnerService := service.NewPartnerService(db)
+	partnerHandler := handler.NewPartnerHandler(*partnerService)
 	return &ApplicationContext{
 		ProductHandler: productHandler,
 		UserHandler:    userHandler,
+		PartnerHandler : partnerHandler,
+		
 	}
 }

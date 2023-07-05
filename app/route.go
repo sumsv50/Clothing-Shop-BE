@@ -12,6 +12,7 @@ func Route() {
 	const apiPath = "/v1/clothing/api"
 	const product = "/products"
 	const auth = "/auth"
+	const partner = "/partners"
 	myRouter := mux.NewRouter().StrictSlash(true)
 	protectedRouter := myRouter.NewRoute().Subrouter()
 	// Turn off authentication admin APIs
@@ -27,6 +28,12 @@ func Route() {
 
 	// Auth APIs
 	myRouter.HandleFunc(apiPath+auth+"/local", app.UserHandler.Login).Methods("POST")
+
+	// Partner API
+	myRouter.HandleFunc(apiPath+partner, app.PartnerHandler.CreatePartnerHandler).Methods("POST")
+	myRouter.HandleFunc(apiPath+partner, app.PartnerHandler.GetPartnersHandler).Methods("GET")
+	myRouter.HandleFunc(apiPath+partner+"/{id}", app.PartnerHandler.SoftDeletePartnerHandler).Methods("DELETE")
+	myRouter.HandleFunc(apiPath+partner+"/{id}", app.PartnerHandler.UpdatePartnerHandler).Methods("PATCH")
 
 	log.Fatal(http.ListenAndServe(":3000", myRouter))
 }
