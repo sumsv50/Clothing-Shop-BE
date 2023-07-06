@@ -13,6 +13,9 @@ func Route() {
 	const product = "/products"
 	const auth = "/auth"
 	const partner = "/partners"
+	const category = "/category"
+	const parent = "/parent"
+	const child = "/child"
 	myRouter := mux.NewRouter().StrictSlash(true)
 	protectedRouter := myRouter.NewRoute().Subrouter()
 	// Turn off authentication admin APIs
@@ -34,6 +37,19 @@ func Route() {
 	myRouter.HandleFunc(apiPath+partner, app.PartnerHandler.GetPartnersHandler).Methods("GET")
 	myRouter.HandleFunc(apiPath+partner+"/{id}", app.PartnerHandler.SoftDeletePartnerHandler).Methods("DELETE")
 	myRouter.HandleFunc(apiPath+partner+"/{id}", app.PartnerHandler.UpdatePartnerHandler).Methods("PATCH")
+
+	// category parent API
+	myRouter.HandleFunc(apiPath+category+parent, app.CategoryParentHandler.CreateCategoryParentHandler).Methods("POST")
+	myRouter.HandleFunc(apiPath+category+parent, app.CategoryParentHandler.GetCategoryParentsHandler).Methods("GET")
+	myRouter.HandleFunc(apiPath+category+parent+"/{id}", app.CategoryParentHandler.SoftDeleteCategoryParentHandler).Methods("DELETE")
+	myRouter.HandleFunc(apiPath+category+parent+"/{id}", app.CategoryParentHandler.UpdateCategoryParentHandler).Methods("PATCH")
+
+	// category child API
+	myRouter.HandleFunc(apiPath+category+child, app.CategoryChildHandler.CreateCategoryChildHandler).Methods("POST")
+	myRouter.HandleFunc(apiPath+category+child, app.CategoryChildHandler.GetCategoryChildsHandler).Methods("GET")
+	myRouter.HandleFunc(apiPath+category+child +"/{id}", app.CategoryChildHandler.SoftDeleteCategoryChildHandler).Methods("DELETE")
+	myRouter.HandleFunc(apiPath+category+child +"/{id}", app.CategoryChildHandler.UpdateCategoryChildHandler).Methods("PATCH")
+
 
 	log.Fatal(http.ListenAndServe(":3000", myRouter))
 }
