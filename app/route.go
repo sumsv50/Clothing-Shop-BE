@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
+	"github.com/rs/cors"
 )
 
 func Route() {
@@ -16,6 +17,12 @@ func Route() {
 	const category = "/category"
 	const parent = "/parent"
 	const child = "/child"
+
+	cors := cors.New(cors.Options{
+		AllowedOrigins: []string{"*"},
+		AllowedHeaders: []string{"*"},
+	})
+
 	myRouter := mux.NewRouter().StrictSlash(true)
 	protectedRouter := myRouter.NewRoute().Subrouter()
 	// Turn off authentication admin APIs
@@ -47,9 +54,9 @@ func Route() {
 	// category child API
 	myRouter.HandleFunc(apiPath+category+child, app.CategoryChildHandler.CreateCategoryChildHandler).Methods("POST")
 	myRouter.HandleFunc(apiPath+category+child, app.CategoryChildHandler.GetCategoryChildsHandler).Methods("GET")
-	myRouter.HandleFunc(apiPath+category+child +"/{id}", app.CategoryChildHandler.SoftDeleteCategoryChildHandler).Methods("DELETE")
-	myRouter.HandleFunc(apiPath+category+child +"/{id}", app.CategoryChildHandler.UpdateCategoryChildHandler).Methods("PATCH")
+	myRouter.HandleFunc(apiPath+category+child+"/{id}", app.CategoryChildHandler.SoftDeleteCategoryChildHandler).Methods("DELETE")
+	myRouter.HandleFunc(apiPath+category+child+"/{id}", app.CategoryChildHandler.UpdateCategoryChildHandler).Methods("PATCH")
 
-
-	log.Fatal(http.ListenAndServe(":3000", myRouter))
+	handler := cors.Handler(myRouter)
+	log.Fatal(http.ListenAndServe(":3000", handler))
 }
