@@ -17,7 +17,6 @@ func NewCategoryParentHandler(s CategoryParentService) *CategoryParentHandler {
 	return &CategoryParentHandler{service: s}
 }
 
-
 func (h *CategoryParentHandler) CreateCategoryParentHandler(w http.ResponseWriter, r *http.Request) {
 	var categoryParent CategoryParents
 	err := json.NewDecoder(r.Body).Decode(&categoryParent)
@@ -43,7 +42,7 @@ func (h *CategoryParentHandler) GetCategoryParentsHandler(w http.ResponseWriter,
 		JSON(w, http.StatusInternalServerError, err.Error(), nil)
 		return
 	}
-	JSON(w, http.StatusCreated, "", map[string]interface{}{"categoryParents": categoryParents})
+	JSON(w, http.StatusOK, "", map[string]interface{}{"categoryParents": categoryParents})
 }
 
 func (h *CategoryParentHandler) SoftDeleteCategoryParentHandler(w http.ResponseWriter, r *http.Request) {
@@ -82,4 +81,3 @@ func (h *CategoryParentHandler) UpdateCategoryParentHandler(w http.ResponseWrite
 	}
 	JSON(w, http.StatusCreated, "", map[string]interface{}{"categoryParent": res})
 }
-
