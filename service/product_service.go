@@ -45,6 +45,7 @@ func (s *ProductService) DeleteProductSoft(id string) error {
 
 	return nil
 }
+
 func (r *ProductService) Update(product Product) (*Product, error) {
 	result := r.DB.Model(&product).Where("is_deleted = ?", false).Updates(&product)
 	if result.RowsAffected <= 0 {
@@ -54,5 +55,18 @@ func (r *ProductService) Update(product Product) (*Product, error) {
 		return nil, result.Error // Product not found, return error
 	}
 	r.DB.First(&product)
+	return &product, nil
+}
+
+func (r *ProductService) GetProductDetail(productId string) (*Product, error) {
+	var product Product
+	result := r.DB.First(&product, productId)
+	if result.RowsAffected <= 0 {
+		return nil, fmt.Errorf("can not find Product id")
+	}
+	if result.Error != nil {
+		return nil, result.Error // Product not found, return error
+	}
+
 	return &product, nil
 }

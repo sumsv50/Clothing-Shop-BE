@@ -73,3 +73,13 @@ func (h *ProductHandler) UpdateProductHandler(w http.ResponseWriter, r *http.Req
 	}
 	JSON(w, http.StatusOK, "", map[string]interface{}{"product": res})
 }
+
+func (h *ProductHandler) GetProductDetailHandler(w http.ResponseWriter, r *http.Request) {
+	id := mux.Vars(r)["id"]
+	product, er2 := h.service.GetProductDetail(id)
+	if er2 != nil {
+		JSON(w, http.StatusInternalServerError, er2.Error(), nil)
+		return
+	}
+	JSON(w, http.StatusOK, "", map[string]interface{}{"product": product})
+}
