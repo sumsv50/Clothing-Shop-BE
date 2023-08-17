@@ -21,6 +21,7 @@ func Route() {
 	cors := cors.New(cors.Options{
 		AllowedOrigins: []string{"*"},
 		AllowedHeaders: []string{"*"},
+		AllowedMethods: []string{http.MethodGet, http.MethodPost, http.MethodPatch, http.MethodPut, http.MethodDelete},
 	})
 
 	myRouter := mux.NewRouter().StrictSlash(true)

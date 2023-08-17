@@ -27,7 +27,7 @@ func (s *CategoryParentService) CreateCategoryParent(categoryParent CategoryPare
 
 func (s *CategoryParentService) GetCategoryParents() ([]*CategoryParents, error) {
 	var categoryParents []*CategoryParents
-	err := s.DB.Where("is_deleted = ? AND parentid IS NULL", false).Order("id").Preload("CategoryChild").Find(&categoryParents).Error
+	err := s.DB.Where("is_deleted = ? AND parentid IS NULL", false).Order("id").Preload("CategoryChild", "is_deleted = ?", false).Find(&categoryParents).Error
 	if err != nil {
 		return nil, fmt.Errorf("create CategoryParent failed: %v", err)
 	}
