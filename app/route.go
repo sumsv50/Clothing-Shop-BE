@@ -1,6 +1,7 @@
 package app
 
 import (
+	"clothing-shop/middleware"
 	"log"
 	"net/http"
 
@@ -27,7 +28,7 @@ func Route() {
 	myRouter := mux.NewRouter().StrictSlash(true)
 	protectedRouter := myRouter.NewRoute().Subrouter()
 	// Turn off authentication admin APIs
-	// protectedRouter.Use(middleware.AuthenticationMiddleware)
+	protectedRouter.Use(middleware.AuthenticationMiddleware)
 
 	// Protected product APIs
 	protectedRouter.HandleFunc(apiPath+product, app.ProductHandler.CreateProductHandler).Methods("POST")
@@ -42,16 +43,16 @@ func Route() {
 	myRouter.HandleFunc(apiPath+auth+"/local", app.UserHandler.Login).Methods("POST")
 
 	// Partner API
-	myRouter.HandleFunc(apiPath+partner, app.PartnerHandler.CreatePartnerHandler).Methods("POST")
+	protectedRouter.HandleFunc(apiPath+partner, app.PartnerHandler.CreatePartnerHandler).Methods("POST")
 	myRouter.HandleFunc(apiPath+partner, app.PartnerHandler.GetPartnersHandler).Methods("GET")
-	myRouter.HandleFunc(apiPath+partner+"/{id}", app.PartnerHandler.SoftDeletePartnerHandler).Methods("DELETE")
-	myRouter.HandleFunc(apiPath+partner+"/{id}", app.PartnerHandler.UpdatePartnerHandler).Methods("PATCH")
+	protectedRouter.HandleFunc(apiPath+partner+"/{id}", app.PartnerHandler.SoftDeletePartnerHandler).Methods("DELETE")
+	protectedRouter.HandleFunc(apiPath+partner+"/{id}", app.PartnerHandler.UpdatePartnerHandler).Methods("PATCH")
 
 	// category parent API
-	myRouter.HandleFunc(apiPath+category+parent, app.CategoryParentHandler.CreateCategoryParentHandler).Methods("POST")
+	protectedRouter.HandleFunc(apiPath+category+parent, app.CategoryParentHandler.CreateCategoryParentHandler).Methods("POST")
 	myRouter.HandleFunc(apiPath+category+parent, app.CategoryParentHandler.GetCategoryParentsHandler).Methods("GET")
-	myRouter.HandleFunc(apiPath+category+parent+"/{id}", app.CategoryParentHandler.SoftDeleteCategoryParentHandler).Methods("DELETE")
-	myRouter.HandleFunc(apiPath+category+parent+"/{id}", app.CategoryParentHandler.UpdateCategoryParentHandler).Methods("PATCH")
+	protectedRouter.HandleFunc(apiPath+category+parent+"/{id}", app.CategoryParentHandler.SoftDeleteCategoryParentHandler).Methods("DELETE")
+	protectedRouter.HandleFunc(apiPath+category+parent+"/{id}", app.CategoryParentHandler.UpdateCategoryParentHandler).Methods("PATCH")
 
 	// category child API
 	myRouter.HandleFunc(apiPath+category+child, app.CategoryChildHandler.CreateCategoryChildHandler).Methods("POST")
