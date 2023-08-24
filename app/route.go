@@ -37,7 +37,7 @@ func Route() {
 
 	// Product APIs
 	myRouter.HandleFunc(apiPath+product, app.ProductHandler.GetProductsHandler).Methods("GET")
-	protectedRouter.HandleFunc(apiPath+product+"/{id}", app.ProductHandler.GetProductDetailHandler).Methods("GET")
+	myRouter.HandleFunc(apiPath+product+"/{id}", app.ProductHandler.GetProductDetailHandler).Methods("GET")
 
 	// Auth APIs
 	myRouter.HandleFunc(apiPath+auth+"/local", app.UserHandler.Login).Methods("POST")
