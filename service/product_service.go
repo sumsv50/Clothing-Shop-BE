@@ -27,7 +27,7 @@ func (s *ProductService) CreateProduct(product Product) (*Product, error) {
 
 func (s *ProductService) GetProducts() ([]*Product, error) {
 	var products []*Product
-	showFields := []string{"id", "productCode", "categoryParentId", "categoryChildId", "title", "images", "oldPrice", "price"}
+	showFields := []string{"id", "productCode", "categoryParentId", "categoryChildId", "title", "images", "oldPrice", "price", "created_at"}
 	err := s.DB.Select(showFields).Where("is_deleted != ?", true).Order("id").Find(&products).Error
 	if err != nil {
 		return nil, fmt.Errorf("create product failed: %v", err)
